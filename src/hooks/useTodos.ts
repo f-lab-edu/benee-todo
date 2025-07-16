@@ -4,6 +4,11 @@ import { Todo } from "@/types/todo-type";
 const LOCAL_STORAGE_KEY = "todos";
 const useTodos = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
+  const isLoading = todos === null;
+
+  const getTodoById = (id: string) => {
+    return todos?.find((v) => v.id === id) ?? null;
+  };
 
   const createTodo = (value: Omit<Todo, "id" | "createdAt" | "completed">) => {
     const newTodo: Todo = {
@@ -69,6 +74,8 @@ const useTodos = () => {
 
   return {
     todos,
+    isLoading,
+    getTodoById,
     createTodo,
     toggleTodo,
     modifyTodo,
