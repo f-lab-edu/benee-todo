@@ -13,7 +13,7 @@ const TodoItem: FC<TodoItemProps> = ({ todo }) => {
   return (
     <Card className="flex justify-start items-center flex-row gap-1 px-4">
       {todo.title} / {todo.description}
-      <p>{formatDate(todo.createdAt, "yyyy-mm-dd")}</p>
+      <p>{formatDate(todo.createdAt, "yyyy-MM-dd hh:mm")}</p>
       <Button variant="outline">
         <Link to={`/todo/${todo.id}`}>수정</Link>
       </Button>
