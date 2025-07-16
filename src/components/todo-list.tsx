@@ -1,16 +1,23 @@
-import { FC } from "react";
-import { Todo } from "../types/todo-type";
+import { useState } from "react";
 import TodoItem from "./todo-item";
+import useTodos from "@/hooks/useTodos";
+import { paginate } from "@/utils/paginate";
 
-interface TodoListProps {
-  todos: Todo[];
-}
+const TodoList = () => {
+  const [page, setPage] = useState<number>(1);
+  const { todos, toggleTodo, deleteTodo } = useTodos();
 
-const TodoList: FC<TodoListProps> = ({ todos }) => {
+  const paginatedTodos = paginate(page, PAGE_SIZE, todos ?? []);
+
   return (
     <div className="w-full max-w-200 mx-auto flex flex-col gap-2">
-      {todos.map((item) => (
-        <TodoItem key={item.id} todo={item} />
+      {paginatedTodos.map((item) => (
+        <TodoItem
+          key={item.id}
+          todo={item}
+          onDelete={() => deleteTodo(item.id)}
+          onToggle={() => toggleTodo(item.id)}
+        />
       ))}
     </div>
   );
