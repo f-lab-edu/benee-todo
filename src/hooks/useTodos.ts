@@ -53,8 +53,7 @@ const useTodos = () => {
   };
 
   useEffect(() => {
-    console.log("useTodos init");
-    if (typeof window !== undefined) {
+    if (typeof window !== "undefined") {
       const storageValue = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (!!storageValue) {
         setTodos(JSON.parse(storageValue).todos);
@@ -63,7 +62,7 @@ const useTodos = () => {
   }, []);
 
   useEffect(() => {
-    if (typeof window !== undefined && todos) {
+    if (typeof window !== "undefined" && todos) {
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ todos: todos }));
     }
   }, [todos]);
