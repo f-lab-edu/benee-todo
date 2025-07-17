@@ -1,4 +1,3 @@
-import { FC } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Link } from "react-router-dom";
@@ -13,11 +12,15 @@ interface TodoItemProps {
   onDelete: () => void;
 }
 
-const TodoItem: FC<TodoItemProps> = ({ todo, onToggle, onDelete }) => {
+const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
   return (
     <Card className="flex justify-between items-center flex-row gap-1 px-4">
       <div className="flex justify-start items-start gap-1">
-        <Checkbox id={todo.id} onClick={onToggle} />
+        <Checkbox
+          id={todo.id}
+          checked={todo.completed}
+          onCheckedChange={() => onToggle()}
+        />
         <div>
           <Label htmlFor={todo.id}>{todo.title}</Label>
           <p>{todo.description}</p>
