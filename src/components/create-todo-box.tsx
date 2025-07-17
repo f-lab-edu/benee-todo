@@ -1,17 +1,15 @@
-import React, { SyntheticEvent } from "react";
+import { SyntheticEvent } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { Todo } from "@/types/todo-type";
+import useTodos from "@/hooks/useTodos";
 
-interface CreateTodoBoxProps {
-  onCreate: (value: Omit<Todo, "id" | "createdAt" | "completed">) => void;
-}
-
-const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
-  const createTodo = (e: SyntheticEvent) => {
+const CreateTodoBox = () => {
+  const { createTodo } = useTodos();
+  const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
     const form = e.target as HTMLFormElement;
@@ -26,7 +24,7 @@ const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
         description: descInput.value ?? "",
       };
 
-      onCreate(newTodo);
+      createTodo(newTodo);
 
       titleInput.value = "";
       descInput.value = "";
@@ -37,7 +35,7 @@ const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
 
   return (
     <Card className="px-4">
-      <form action="submit" onSubmit={createTodo}>
+      <form action="submit" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2">
           <Label htmlFor="title">제목</Label>
           <Input id="title" placeholder="Todo 제목을 입력해주세요." />
