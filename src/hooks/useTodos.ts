@@ -17,7 +17,7 @@ const useTodos = () => {
       completed: false,
       createdAt: new Date(),
     };
-    setTodos([...(todos ?? []), newTodo]);
+    setTodos([newTodo, ...(todos ?? [])]);
   };
 
   const toggleTodo = (id: string) => {
