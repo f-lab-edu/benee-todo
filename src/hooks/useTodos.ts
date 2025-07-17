@@ -29,9 +29,9 @@ const useTodos = () => {
         completed: !todos[targetIdx].completed,
       };
       setTodos([
-        ...todos.slice(0, targetIdx - 1),
+        ...todos.slice(0, targetIdx),
         newTodoValue,
-        ...todos.slice(targetIdx + 1, todos.length - 1),
+        ...todos.slice(targetIdx + 1),
       ]);
     }
   };
@@ -42,9 +42,9 @@ const useTodos = () => {
     if (targetIdx !== -1) {
       const newTodoValue = { ...todos[targetIdx], ...newValue };
       setTodos([
-        ...todos.slice(0, targetIdx - 1),
+        ...todos.slice(0, targetIdx),
         newTodoValue,
-        ...todos.slice(targetIdx + 1, todos.length - 1),
+        ...todos.slice(targetIdx + 1),
       ]);
     }
   };
