@@ -33,7 +33,7 @@ const ModifyTodoBox = () => {
       alert("성공적으로 수정되었습니다.");
       navigate("/");
     } else {
-      console.error("event target is not exist");
+      alert("잘못된 요청입니다.");
     }
   };
 
