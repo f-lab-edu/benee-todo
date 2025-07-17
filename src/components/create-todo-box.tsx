@@ -5,10 +5,12 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
 import { Todo } from "@/types/todo-type";
-import useTodos from "@/hooks/useTodos";
 
-const CreateTodoBox = () => {
-  const { createTodo } = useTodos();
+interface CreateTodoBoxProps {
+  onCreate: (newTodo: Omit<Todo, "id" | "createdAt" | "completed">) => void;
+}
+
+const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
@@ -24,12 +26,12 @@ const CreateTodoBox = () => {
         description: descInput.value ?? "",
       };
 
-      createTodo(newTodo);
+      onCreate(newTodo);
 
       titleInput.value = "";
       descInput.value = "";
     } else {
-      console.error("event target is not exist");
+      alert("등록에 실패했습니다.");
     }
   };
 
