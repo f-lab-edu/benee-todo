@@ -1,7 +1,9 @@
+import { PAGE_SIZE } from "@/components/pagintaion-box";
+
 export const paginate = <T>(
   page: number,
-  size: number = 10,
-  list: Array<T>
+  list: Array<T>,
+  size: number = PAGE_SIZE
 ) => {
   return list.slice((page - 1) * size, page * size) ?? [];
 };
