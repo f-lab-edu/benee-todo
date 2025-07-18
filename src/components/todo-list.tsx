@@ -15,7 +15,10 @@ const TodoList = () => {
     setPage(newPage);
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <>
       <CreateTodoBox onCreate={createTodo} />
