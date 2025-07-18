@@ -17,30 +17,36 @@ const ModifyTodoBox = () => {
   const handleUpdate = (e: SyntheticEvent) => {
     e.preventDefault();
 
+    if (e.target || !params.id) {
+      alert("잘못된 요청입니다.");
+      return;
+    }
+
     const form = e.target as HTMLFormElement;
     const titleInput = form.elements.namedItem("title") as HTMLInputElement;
     const descInput = form.elements.namedItem(
       "description"
     ) as HTMLInputElement;
 
-    if (e.target) {
       const newTodo: Omit<Todo, "id" | "createdAt" | "completed"> = {
         title: titleInput.value ?? "",
         description: descInput.value ?? "",
       };
 
-      modifyTodo(params.id!, newTodo);
+    modifyTodo(params.id, newTodo);
       alert("성공적으로 수정되었습니다.");
       navigate("/");
-    } else {
-      alert("잘못된 요청입니다.");
-    }
   };
 
   const handleDelete = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    deleteTodo(params.id!);
+    if (!params.id) {
+      alert("잘못된 요청입니다.");
+      return;
+    }
+
+    deleteTodo(params.id);
     alert("성공적으로 삭제되었습니다.");
     navigate("/");
   };
