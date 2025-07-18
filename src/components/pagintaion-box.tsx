@@ -1,15 +1,12 @@
-import React, { useMemo } from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-export const PAGE_SIZE = 5;
+import { PAGE_SIZE } from "@/utils/paginate";
 
 interface PaginationBoxProps {
   onPaginate: (page: number) => void;

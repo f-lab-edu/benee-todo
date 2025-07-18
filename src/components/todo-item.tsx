@@ -19,7 +19,7 @@ const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
         <Checkbox
           id={todo.id}
           checked={todo.completed}
-          onCheckedChange={() => onToggle()}
+          onCheckedChange={onToggle}
         />
         <div>
           <Label htmlFor={todo.id}>{todo.title}</Label>

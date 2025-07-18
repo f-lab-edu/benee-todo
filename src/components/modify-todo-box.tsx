@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Todo } from "@/types/todo-type";
+import { Todo, NewTodo } from "@/types/todo-type";
 
 const ModifyTodoBox = () => {
   const params = useParams();
@@ -17,30 +17,36 @@ const ModifyTodoBox = () => {
   const handleUpdate = (e: SyntheticEvent) => {
     e.preventDefault();
 
+    if (e.target || !params.id) {
+      alert("잘못된 요청입니다.");
+      return;
+    }
+
     const form = e.target as HTMLFormElement;
     const titleInput = form.elements.namedItem("title") as HTMLInputElement;
     const descInput = form.elements.namedItem(
       "description"
     ) as HTMLInputElement;
 
-    if (e.target) {
-      const newTodo: Omit<Todo, "id" | "createdAt" | "completed"> = {
-        title: titleInput.value ?? "",
-        description: descInput.value ?? "",
-      };
+    const newTodo: NewTodo = {
+      title: titleInput.value ?? "",
+      description: descInput.value ?? "",
+    };
 
-      modifyTodo(params.id!, newTodo);
-      alert("성공적으로 수정되었습니다.");
-      navigate("/");
-    } else {
-      alert("잘못된 요청입니다.");
-    }
+    modifyTodo(params.id, newTodo);
+    alert("성공적으로 수정되었습니다.");
+    navigate("/");
   };
 
   const handleDelete = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    deleteTodo(params.id!);
+    if (!params.id) {
+      alert("잘못된 요청입니다.");
+      return;
+    }
+
+    deleteTodo(params.id);
     alert("성공적으로 삭제되었습니다.");
     navigate("/");
   };
@@ -58,7 +64,9 @@ const ModifyTodoBox = () => {
     }
   }, [isLoading]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import TodoItem from "./todo-item";
-import PaginationBox, { PAGE_SIZE } from "./pagintaion-box";
+import PaginationBox from "./pagintaion-box";
 import useTodos from "@/hooks/useTodos";
 import { paginate } from "@/utils/paginate";
 import CreateTodoBox from "./create-todo-box";
@@ -9,13 +9,16 @@ const TodoList = () => {
   const [page, setPage] = useState<number>(1);
   const { todos, isLoading, createTodo, toggleTodo, deleteTodo } = useTodos();
 
-  const paginatedTodos = paginate(page, PAGE_SIZE, todos ?? []);
+  const paginatedTodos = paginate(page, todos ?? []);
 
   const handlePage = (newPage: number) => {
     setPage(newPage);
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <>
       <CreateTodoBox onCreate={createTodo} />
