@@ -1,18 +1,43 @@
-import { FC } from "react";
-import { Todo } from "../types/todo-type";
+import { useState } from "react";
 import TodoItem from "./todo-item";
+import PaginationBox from "./pagintaion-box";
+import useTodos from "@/hooks/useTodos";
+import { paginate } from "@/utils/paginate";
+import CreateTodoBox from "./create-todo-box";
 
-interface TodoListProps {
-  todos: Todo[];
-}
+const TodoList = () => {
+  const [page, setPage] = useState<number>(1);
+  const { todos, isLoading, createTodo, toggleTodo, deleteTodo } = useTodos();
 
-const TodoList: FC<TodoListProps> = ({ todos }) => {
+  const paginatedTodos = paginate(page, todos ?? []);
+
+  const handlePage = (newPage: number) => {
+    setPage(newPage);
+  };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
-    <div className="w-full max-w-200 mx-auto flex flex-col gap-2">
-      {todos.map((item) => (
-        <TodoItem key={item.id} todo={item} />
-      ))}
-    </div>
+    <>
+      <CreateTodoBox onCreate={createTodo} />
+      <div className="flex flex-col gap-2">
+        {paginatedTodos.map((item) => (
+          <TodoItem
+            key={item.id}
+            todo={item}
+            onDelete={() => deleteTodo(item.id)}
+            onToggle={() => toggleTodo(item.id)}
+          />
+        ))}
+        <PaginationBox
+          page={page}
+          total={todos?.length ?? 0}
+          onPaginate={handlePage}
+        />
+      </div>
+    </>
   );
 };
 
