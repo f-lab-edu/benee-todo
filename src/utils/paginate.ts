@@ -1,4 +1,4 @@
-import { PAGE_SIZE } from "@/components/pagintaion-box";
+export const PAGE_SIZE = 5;
 
 export const paginate = <T>(
   page: number,
