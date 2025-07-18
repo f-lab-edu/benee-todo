@@ -6,7 +6,7 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Todo } from "@/types/todo-type";
+import { Todo, NewTodo } from "@/types/todo-type";
 
 const ModifyTodoBox = () => {
   const params = useParams();
@@ -28,14 +28,14 @@ const ModifyTodoBox = () => {
       "description"
     ) as HTMLInputElement;
 
-      const newTodo: Omit<Todo, "id" | "createdAt" | "completed"> = {
-        title: titleInput.value ?? "",
-        description: descInput.value ?? "",
-      };
+    const newTodo: NewTodo = {
+      title: titleInput.value ?? "",
+      description: descInput.value ?? "",
+    };
 
     modifyTodo(params.id, newTodo);
-      alert("성공적으로 수정되었습니다.");
-      navigate("/");
+    alert("성공적으로 수정되었습니다.");
+    navigate("/");
   };
 
   const handleDelete = (e: SyntheticEvent) => {

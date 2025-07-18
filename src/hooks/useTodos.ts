@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Todo } from "@/types/todo-type";
+import { Todo, NewTodo } from "@/types/todo-type";
 
 const LOCAL_STORAGE_KEY = "todos";
 const useTodos = () => {
@@ -10,7 +10,7 @@ const useTodos = () => {
     return todos?.find((v) => v.id === id) ?? null;
   };
 
-  const createTodo = (value: Omit<Todo, "id" | "createdAt" | "completed">) => {
+  const createTodo = (value: NewTodo) => {
     const newTodo: Todo = {
       ...value,
       id: Date.now().toString(),

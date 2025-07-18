@@ -4,10 +4,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Label } from "./ui/label";
-import { Todo } from "@/types/todo-type";
+import { NewTodo } from "@/types/todo-type";
 
 interface CreateTodoBoxProps {
-  onCreate: (newTodo: Omit<Todo, "id" | "createdAt" | "completed">) => void;
+  onCreate: (newTodo: NewTodo) => void;
 }
 
 const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
@@ -21,7 +21,7 @@ const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
     ) as HTMLInputElement;
 
     if (e.target) {
-      const newTodo: Omit<Todo, "id" | "createdAt" | "completed"> = {
+      const newTodo: NewTodo = {
         title: titleInput.value ?? "",
         description: descInput.value ?? "",
       };
