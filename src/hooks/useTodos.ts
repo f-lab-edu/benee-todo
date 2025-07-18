@@ -17,59 +17,83 @@ const useTodos = () => {
       completed: false,
       createdAt: new Date(),
     };
+
     setTodos([newTodo, ...(todos ?? [])]);
   };
 
   const toggleTodo = (id: string) => {
-    if (!todos) return;
-    const targetIdx = todos.findIndex((v) => v.id === id);
-    if (targetIdx !== -1) {
-      const newTodoValue = {
-        ...todos[targetIdx],
-        completed: !todos[targetIdx].completed,
-      };
-      setTodos([
-        ...todos.slice(0, targetIdx),
-        newTodoValue,
-        ...todos.slice(targetIdx + 1),
-      ]);
+    if (!todos) {
+      return;
     }
+
+    const targetIdx = todos.findIndex((v) => v.id === id);
+    if (targetIdx === -1) {
+      return;
+    }
+
+    const newTodoValue = {
+      ...todos[targetIdx],
+      completed: !todos[targetIdx].completed,
+    };
+
+    setTodos([
+      ...todos.slice(0, targetIdx),
+      newTodoValue,
+      ...todos.slice(targetIdx + 1),
+    ]);
   };
 
   const modifyTodo = (id: string, newValue: Partial<Todo>) => {
-    if (!todos) return;
-    const targetIdx = todos.findIndex((v) => v.id === id);
-    if (targetIdx !== -1) {
-      const newTodoValue = { ...todos[targetIdx], ...newValue };
-      setTodos([
-        ...todos.slice(0, targetIdx),
-        newTodoValue,
-        ...todos.slice(targetIdx + 1),
-      ]);
+    if (!todos) {
+      return;
     }
+
+    const targetIdx = todos.findIndex((v) => v.id === id);
+    if (targetIdx === -1) {
+      return;
+    }
+
+    const newTodoValue = { ...todos[targetIdx], ...newValue };
+
+    setTodos([
+      ...todos.slice(0, targetIdx),
+      newTodoValue,
+      ...todos.slice(targetIdx + 1),
+    ]);
   };
 
   const deleteTodo = (id: string) => {
-    if (!todos) return;
-    const targetIdx = todos.findIndex((v) => v.id === id);
-    if (targetIdx !== -1) {
-      setTodos(todos.filter((_, index) => index !== targetIdx));
+    if (!todos) {
+      return;
     }
+
+    const targetIdx = todos.findIndex((v) => v.id === id);
+    if (targetIdx === -1) {
+      return;
+    }
+
+    setTodos(todos.filter((_, index) => index !== targetIdx));
   };
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      const storageValue = localStorage.getItem(LOCAL_STORAGE_KEY);
-      if (!!storageValue) {
-        setTodos(JSON.parse(storageValue).todos);
-      }
+    if (typeof window === "undefined") {
+      return;
     }
+
+    const storageValue = localStorage.getItem(LOCAL_STORAGE_KEY);
+    if (!storageValue) {
+      return;
+    }
+
+    setTodos(JSON.parse(storageValue).todos);
   }, []);
 
   useEffect(() => {
-    if (typeof window !== "undefined" && todos) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ todos: todos }));
+    if (typeof window === "undefined" || !todos) {
+      return;
     }
+
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ todos: todos }));
   }, [todos]);
 
   return {
