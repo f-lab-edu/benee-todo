@@ -17,7 +17,7 @@ const ModifyTodoBox = () => {
   const handleUpdate = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (e.target || !params.id) {
+    if (!e.target || !params.id) {
       alert("잘못된 요청입니다.");
       return;
     }
