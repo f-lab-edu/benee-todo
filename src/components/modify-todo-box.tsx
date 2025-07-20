@@ -6,31 +6,26 @@ import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Todo, NewTodo } from "@/types/todo-type";
+import { NewTodo } from "@/types/todo-type";
 
 const ModifyTodoBox = () => {
   const params = useParams();
   const navigate = useNavigate();
-  const [todo, setTodo] = useState<Todo | null>(null);
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
   const { isLoading, getTodoById, modifyTodo, deleteTodo } = useTodos();
 
   const handleUpdate = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    if (!e.target || !params.id) {
+    if (!params.id) {
       alert("잘못된 요청입니다.");
       return;
     }
 
-    const form = e.target as HTMLFormElement;
-    const titleInput = form.elements.namedItem("title") as HTMLInputElement;
-    const descInput = form.elements.namedItem(
-      "description"
-    ) as HTMLInputElement;
-
     const newTodo: NewTodo = {
-      title: titleInput.value ?? "",
-      description: descInput.value ?? "",
+      title,
+      description,
     };
 
     modifyTodo(params.id, newTodo);
@@ -57,10 +52,11 @@ const ModifyTodoBox = () => {
     }
     const initialTodo = getTodoById(params.id ?? "");
     if (!initialTodo) {
-      alert("잘못된 요청입니다.");
+      alert("Todo 데이터가 올바르지 않습니다.");
       navigate("/");
     } else {
-      setTodo(initialTodo);
+      setTitle(initialTodo.title);
+      setDescription(initialTodo.title);
     }
   }, [isLoading]);
 
@@ -77,7 +73,8 @@ const ModifyTodoBox = () => {
             <Input
               id="title"
               placeholder="제목을 입력해주세요."
-              defaultValue={todo?.title ?? ""}
+              defaultValue={title}
+              onChange={(e) => setTitle(e.target.value)}
             />
           </div>
           <div className="flex flex-col gap-2">
@@ -85,7 +82,8 @@ const ModifyTodoBox = () => {
             <Textarea
               id="description"
               placeholder="내용을 입력해주세요."
-              defaultValue={todo?.description ?? ""}
+              defaultValue={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div className="flex justify-center items-center gap-1">
