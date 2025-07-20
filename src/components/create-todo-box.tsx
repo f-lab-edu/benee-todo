@@ -1,4 +1,4 @@
-import { SyntheticEvent } from "react";
+import { useState, SyntheticEvent } from "react";
 import { Card } from "./ui/card";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -11,28 +11,20 @@ interface CreateTodoBoxProps {
 }
 
 const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
+  const [title, setTitle] = useState<string>("");
+  const [description, setDescription] = useState<string>("");
+
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
 
-    const form = e.target as HTMLFormElement;
-    const titleInput = form.elements.namedItem("title") as HTMLInputElement;
-    const descInput = form.elements.namedItem(
-      "description"
-    ) as HTMLInputElement;
+    const newTodo: NewTodo = {
+      title,
+      description,
+    };
+    onCreate(newTodo);
 
-    if (e.target) {
-      const newTodo: NewTodo = {
-        title: titleInput.value ?? "",
-        description: descInput.value ?? "",
-      };
-
-      onCreate(newTodo);
-
-      titleInput.value = "";
-      descInput.value = "";
-    } else {
-      alert("등록에 실패했습니다.");
-    }
+    setTitle("");
+    setDescription("");
   };
 
   return (
@@ -40,11 +32,21 @@ const CreateTodoBox = ({ onCreate }: CreateTodoBoxProps) => {
       <form action="submit" onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2">
           <Label htmlFor="title">제목</Label>
-          <Input id="title" placeholder="Todo 제목을 입력해주세요." />
+          <Input
+            id="title"
+            placeholder="Todo 제목을 입력해주세요."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </div>
         <div className="flex flex-col gap-2">
           <Label htmlFor="description">내용</Label>
-          <Textarea id="description" placeholder="Todo 설명을 입력해주세요." />
+          <Textarea
+            id="description"
+            placeholder="Todo 설명을 입력해주세요."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </div>
         <div className="flex justify-end items-center">
           <Button variant="secondary" type="submit">
