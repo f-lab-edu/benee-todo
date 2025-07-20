@@ -12,10 +12,10 @@ const useTodos = () => {
 
   const createTodo = (value: NewTodo) => {
     const newTodo: Todo = {
-      ...value,
       id: Date.now().toString(),
       completed: false,
       createdAt: new Date(),
+      ...value,
     };
 
     setTodos([newTodo, ...(todos ?? [])]);
@@ -26,21 +26,16 @@ const useTodos = () => {
       return;
     }
 
-    const targetIdx = todos.findIndex((v) => v.id === id);
-    if (targetIdx === -1) {
-      return;
-    }
+    const newTodos = todos.map((v) =>
+      v.id === id
+        ? {
+            ...v,
+            completed: !v.completed,
+          }
+        : v
+    );
 
-    const newTodoValue = {
-      ...todos[targetIdx],
-      completed: !todos[targetIdx].completed,
-    };
-
-    setTodos([
-      ...todos.slice(0, targetIdx),
-      newTodoValue,
-      ...todos.slice(targetIdx + 1),
-    ]);
+    setTodos(newTodos);
   };
 
   const modifyTodo = (id: string, newValue: Partial<Todo>) => {
@@ -53,13 +48,16 @@ const useTodos = () => {
       return;
     }
 
-    const newTodoValue = { ...todos[targetIdx], ...newValue };
+    const newTodos = todos.map((v) =>
+      v.id === id
+        ? {
+            ...v,
+            ...newValue,
+          }
+        : v
+    );
 
-    setTodos([
-      ...todos.slice(0, targetIdx),
-      newTodoValue,
-      ...todos.slice(targetIdx + 1),
-    ]);
+    setTodos(newTodos);
   };
 
   const deleteTodo = (id: string) => {
@@ -67,12 +65,7 @@ const useTodos = () => {
       return;
     }
 
-    const targetIdx = todos.findIndex((v) => v.id === id);
-    if (targetIdx === -1) {
-      return;
-    }
-
-    setTodos(todos.filter((_, index) => index !== targetIdx));
+    setTodos(todos.filter((v) => v.id !== id));
   };
 
   useEffect(() => {
