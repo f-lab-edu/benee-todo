@@ -5,3 +5,5 @@ export interface Todo {
   completed: boolean;
   createdAt: Date;
 }
+
+export type NewTodo = Omit<Todo, "id" | "createdAt" | "completed">;
