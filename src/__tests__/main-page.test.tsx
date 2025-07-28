@@ -6,7 +6,8 @@ import { MemoryRouter } from "react-router-dom";
 import TodoList from "@/components/todo-list";
 import useTodos from "@/hooks/useTodos";
 
-import { todo, newTodo } from "./fixtures/todos-fixture";
+import { TODO, NEW_TODO } from "./fixtures/todos-fixture";
+import { NewTodo, Todo } from "@/types/todo-type";
 
 vi.mock("@/hooks/useTodos");
 const mockedUseTodos = useTodos as MockedFunction<typeof useTodos>;
@@ -14,11 +15,12 @@ const mockedUseTodos = useTodos as MockedFunction<typeof useTodos>;
 describe("todo 생성 테스트", () => {
   beforeEach(() => {
     mockedUseTodos.mockReturnValue({
-      todos: [todo],
+      todos: [TODO],
       isLoading: false,
       getTodoById: vi.fn(),
       createTodo: vi.fn(),
       toggleTodo: vi.fn(),
+      modifyTodo: vi.fn(),
       deleteTodo: vi.fn(),
     });
 
@@ -55,23 +57,27 @@ describe("todo 생성 테스트", () => {
     );
     const createButton = screen.getByRole("button", { name: "추가하기" });
 
-    await userEvent.type(titleInput, newTodo.title);
-    await userEvent.type(descInput, newTodo.description || "");
+    await userEvent.type(titleInput, NEW_TODO.title);
+    await userEvent.type(descInput, NEW_TODO.description || "");
     await userEvent.click(createButton);
 
+    const todos: Todo[] | null = [
+      {
+        id: "2",
+        title: NEW_TODO.title,
+        description: NEW_TODO.description,
+        completed: false,
+        createdAt: new Date(),
+      },
+      TODO,
+    ];
+
     mockedUseTodos.mockReturnValue({
-      todos: [
-        {
-          id: "2",
-          title: newTodo.title,
-          description: newTodo.description,
-          completed: false,
-          createdAt: new Date(),
-        },
-        todo,
-      ],
+      todos,
       isLoading: false,
-      createTodo: vi.fn((v: Todo) => {}),
+      createTodo: vi.fn((v: NewTodo) => {}),
+      getTodoById: vi.fn(),
+      modifyTodo: vi.fn(),
       toggleTodo: vi.fn(),
       deleteTodo: vi.fn(),
     });
@@ -82,7 +88,7 @@ describe("todo 생성 테스트", () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText(newTodo.title)).toBeInTheDocument();
-    expect(await screen.findByText(newTodo.description)).toBeInTheDocument();
+    expect(await screen.findByText(NEW_TODO.title)).toBeInTheDocument();
+    expect(await screen.findByText(NEW_TODO.description)).toBeInTheDocument();
   });
 });

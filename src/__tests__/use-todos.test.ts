@@ -1,9 +1,9 @@
 import { renderHook, act, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import useTodos, { LOCAL_STORAGE_KEY } from "@/hooks/useTodos";
-import { todo, newTodo, todoToCompare } from "./fixtures/todos-fixture";
+import { TODO, NEW_TODO, TODO_TO_COMPARE } from "./fixtures/todos-fixture";
 
-const storagedValue = JSON.stringify({ todos: [todo] });
+const storagedValue = JSON.stringify({ todos: [TODO] });
 
 describe("useTodos hook 테스트", () => {
   afterEach(() => {
@@ -19,22 +19,26 @@ describe("useTodos hook 테스트", () => {
   it("createTodo: 새로운 값을 추가했을 때 todos에 배열 형태로 값이 저장되며, 로컬스토리지에 반영된다", async () => {
     const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
     const { result } = renderHook(useTodos);
+
+    // TODO act 대신 다른 matcher를 써보기!
     act(() => {
-      result.current.createTodo(newTodo);
+      result.current.createTodo(NEW_TODO);
     });
 
     await waitFor(() => {
       expect(result.current.todos?.length).toBe(1);
-      expect(result.current.todos?.[0].title).toBe(newTodo.title);
-      expect(result.current.todos?.[0].description).toBe(newTodo.description);
+      expect(result.current.todos?.[0].title).toBe(NEW_TODO.title);
+      expect(result.current.todos?.[0].description).toBe(NEW_TODO.description);
 
       const lastSetCall = setItemSpy.mock.calls.at(-1)!;
       const [calledKey, calledValue] = lastSetCall;
       const parsedCalledValue = JSON.parse(calledValue);
 
       expect(calledKey).toBe(LOCAL_STORAGE_KEY);
-      expect(parsedCalledValue?.todos[0].title).toBe(newTodo.title);
-      expect(parsedCalledValue?.todos[0].description).toBe(newTodo.description);
+      expect(parsedCalledValue?.todos[0].title).toBe(NEW_TODO.title);
+      expect(parsedCalledValue?.todos[0].description).toBe(
+        NEW_TODO.description
+      );
     });
   });
 
@@ -45,8 +49,8 @@ describe("useTodos hook 테스트", () => {
 
     await waitFor(() => {
       const value = result.current.getTodoById("1");
-      expect(value?.title).toBe(todo.title);
-      expect(value?.description).toBe(todo.description);
+      expect(value?.title).toBe(TODO.title);
+      expect(value?.description).toBe(TODO.description);
     });
   });
 
@@ -68,7 +72,7 @@ describe("useTodos hook 테스트", () => {
 
       expect(calledKey).toBe(LOCAL_STORAGE_KEY);
       expect(JSON.parse(calledValue)).toMatchObject({
-        todos: [{ ...todoToCompare, completed: true }],
+        todos: [{ ...TODO_TO_COMPARE, completed: true }],
       });
     });
   });
