@@ -56,7 +56,7 @@ describe("todo 생성 테스트", () => {
     const createButton = screen.getByRole("button", { name: "추가하기" });
 
     await userEvent.type(titleInput, newTodo.title);
-    await userEvent.type(descInput, newTodo.description);
+    await userEvent.type(descInput, newTodo.description || "");
     await userEvent.click(createButton);
 
     mockedUseTodos.mockReturnValue({
