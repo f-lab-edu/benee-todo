@@ -5,6 +5,10 @@ import { Todo } from "@/types/todo-type";
 import { formatDate } from "date-fns";
 import { Checkbox } from "./ui/checkbox";
 import { Label } from "./ui/label";
+import {
+  TEST_ID_TODO_TITLE,
+  TEST_ID_TODO_DESCRIPTION,
+} from "@/__tests__/test-ids/todo-item";
 
 interface TodoItemProps {
   todo: Todo;
@@ -22,8 +26,10 @@ const TodoItem = ({ todo, onToggle, onDelete }: TodoItemProps) => {
           onCheckedChange={onToggle}
         />
         <div>
-          <Label htmlFor={todo.id}>{todo.title}</Label>
-          <p>{todo.description}</p>
+          <Label htmlFor={todo.id} data-testid={TEST_ID_TODO_TITLE}>
+            {todo.title}
+          </Label>
+          <p data-testid={TEST_ID_TODO_DESCRIPTION}>{todo.description}</p>
         </div>
       </div>
       <div className="flex justify-end items-center gap-1">

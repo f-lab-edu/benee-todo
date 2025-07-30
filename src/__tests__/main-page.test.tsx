@@ -7,13 +7,17 @@ import TodoList from "@/components/todo-list";
 import useTodos from "@/hooks/useTodos";
 
 import { TODO, NEW_TODO } from "./fixtures/todos-fixture";
-import { NewTodo, Todo } from "@/types/todo-type";
+import { Todo } from "@/types/todo-type";
+import {
+  TEST_ID_TODO_TITLE,
+  TEST_ID_TODO_DESCRIPTION,
+} from "./test-ids/todo-item";
 
 vi.mock("@/hooks/useTodos");
 const mockedUseTodos = useTodos as MockedFunction<typeof useTodos>;
 
 describe("todo 생성 테스트", () => {
-  beforeEach(() => {
+  it("제목과 설명을 입력하고 생성 버튼을 누르면 투두 생성 폼의 입력 필드가 초기화된다", async () => {
     mockedUseTodos.mockReturnValue({
       todos: [TODO],
       isLoading: false,
@@ -29,9 +33,7 @@ describe("todo 생성 테스트", () => {
         <TodoList />
       </MemoryRouter>
     );
-  });
 
-  it("제목과 설명을 입력하고 생성 버튼을 누르면 투두 생성 폼의 입력 필드가 초기화된다", async () => {
     const titleInput = await screen.findByPlaceholderText(
       "Todo 제목을 입력해주세요."
     );
@@ -49,6 +51,22 @@ describe("todo 생성 테스트", () => {
   });
 
   it("제목과 설명을 입력하고 생성 버튼을 누르면 투두 리스트에 입력한 내용이 추가된다", async () => {
+    mockedUseTodos.mockReturnValue({
+      todos: [TODO],
+      isLoading: false,
+      getTodoById: vi.fn(),
+      createTodo: vi.fn(),
+      toggleTodo: vi.fn(),
+      modifyTodo: vi.fn(),
+      deleteTodo: vi.fn(),
+    });
+
+    const { rerender } = render(
+      <MemoryRouter>
+        <TodoList />
+      </MemoryRouter>
+    );
+
     const titleInput = await screen.findByPlaceholderText(
       "Todo 제목을 입력해주세요."
     );
@@ -75,20 +93,26 @@ describe("todo 생성 테스트", () => {
     mockedUseTodos.mockReturnValue({
       todos,
       isLoading: false,
-      createTodo: vi.fn((v: NewTodo) => {}),
       getTodoById: vi.fn(),
-      modifyTodo: vi.fn(),
+      createTodo: vi.fn(),
       toggleTodo: vi.fn(),
+      modifyTodo: vi.fn(),
       deleteTodo: vi.fn(),
     });
 
-    render(
+    rerender(
       <MemoryRouter>
         <TodoList />
       </MemoryRouter>
     );
 
-    expect(await screen.findByText(NEW_TODO.title)).toBeInTheDocument();
-    expect(await screen.findByText(NEW_TODO.description)).toBeInTheDocument();
+    const targetTitle = await screen.getAllByTestId(TEST_ID_TODO_TITLE)?.[0]
+      .textContent;
+    const targetDescription = await screen.getAllByTestId(
+      TEST_ID_TODO_DESCRIPTION
+    )?.[0].textContent;
+
+    expect(await targetTitle).toBe(NEW_TODO.title);
+    expect(await targetDescription).toBe(NEW_TODO.description);
   });
 });
