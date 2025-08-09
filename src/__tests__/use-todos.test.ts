@@ -1,4 +1,4 @@
-import { renderHook, act, waitFor } from "@testing-library/react";
+import { renderHook, waitFor } from "@testing-library/react";
 import { vi } from "vitest";
 import useTodos, { LOCAL_STORAGE_KEY } from "@/hooks/useTodos";
 import { TODO, NEW_TODO, TODO_TO_COMPARE } from "./fixtures/todos-fixture";
@@ -20,12 +20,9 @@ describe("useTodos hook 테스트", () => {
     const setItemSpy = vi.spyOn(Storage.prototype, "setItem");
     const { result } = renderHook(useTodos);
 
-    // TODO act 대신 다른 matcher를 써보기!
-    act(() => {
-      result.current.createTodo(NEW_TODO);
-    });
-
     await waitFor(() => {
+      result.current.createTodo(NEW_TODO);
+
       expect(result.current.todos?.length).toBe(1);
       expect(result.current.todos?.[0].title).toBe(NEW_TODO.title);
       expect(result.current.todos?.[0].description).toBe(NEW_TODO.description);
@@ -60,11 +57,9 @@ describe("useTodos hook 테스트", () => {
 
     const { result } = renderHook(useTodos);
 
-    act(() => {
-      result.current.toggleTodo("1");
-    });
-
     await waitFor(() => {
+      result.current.toggleTodo("1");
+
       expect(result.current.getTodoById("1")?.completed).toBe(true);
 
       const lastSetCall = setItemSpy.mock.calls.at(-1)!;
@@ -83,11 +78,9 @@ describe("useTodos hook 테스트", () => {
 
     const { result } = renderHook(useTodos);
 
-    act(() => {
-      result.current.deleteTodo("1");
-    });
-
     await waitFor(() => {
+      result.current.deleteTodo("1");
+
       expect(result.current.todos?.length).toBe(0);
 
       const lastSetCall = setItemSpy.mock.calls.at(-1)!;
