@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Todo, NewTodo } from "@/types/todo-type";
 
-const LOCAL_STORAGE_KEY = "todos";
+export const LOCAL_STORAGE_KEY = "todos";
 const useTodos = () => {
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const isLoading = todos === null;
